@@ -1,0 +1,130 @@
+#include <iostream> 
+#include <string> 
+#include <cctype> 
+#include <cmath>
+
+using namespace std; 
+
+
+// Function to input message from user
+
+string message() {
+    while (true) {
+        string text,res;
+        cout<<"Enter the text: ";
+        getline(cin, text); // Get input from the user
+        if (text.length() > 80) // Check the length of the message
+            cout<<"Please enter less than 80 letters"<<endl;
+        else{
+            for(char i : text){
+                res += toupper(i); // Convert message to uppercase
+            }
+            return res;
+        }
+    }
+}
+
+// Function to input key from user
+
+string get_key(){
+    while (true){
+        bool check = true;
+        string key, res;
+        cout<<"Enter The key: ";
+        getline(cin, key); // Get key input from the user
+        for(char i : key){
+            if (!isalpha(i)){ // Check if key's characters are letters
+                cout<<"Enter a valid key"<<endl;
+                check = false;
+                break;
+            }
+        }
+        if (check && key.length() < 8){ // Check the length of the key
+            for (char i : key)
+                res += toupper(i); // Convert key to uppercase
+            return res;
+        }
+        else
+            cout<<"please enter a key of 8 letters maximum"<<endl;
+    } 
+}
+
+
+// Function to perform Vigenere cipher encryption 
+
+int encryption(string text, string key){
+    int count = ceil(((double)text.length()/(double)key.length())); // Calculate the repetition count of the key
+    string result,result1;
+    for(int i = 0; i < count;i++)
+        result += key; // Repeat the key
+        cout << text << endl << result << endl;
+    
+    for(int i = 0; i < text.length();i++){
+        if(isalpha(text[i])) // Check if each character in the message is a letter
+            result1 += char(((text[i] + result[i]) % 26)+'A'); // Encrypt the character
+        else
+            result1 += text[i]; // Leave non-alphabetic characters unchanged
+    }
+    cout<<"The Encryption of text: "<<result1<<endl;
+    return 0;
+    
+}
+
+
+
+// Function to perform Vigenere cipher decryption
+
+int decryption(string text, string key){
+    int count = ceil(((double)text.length()/(double)key.length())); // Calculate the repetition count of the key
+    string result,result1;
+    for(int i = 0; i < count;i++)
+        result += key; // Repeat the key
+        cout << text << endl << result << endl;
+    
+    for(int i = 0; i < text.length();i++){
+        if(isalpha(text[i]))
+            result1 += char(((text[i] - result[i] + 26) % 26)+'A'); // Decrypt the character
+        else
+            result1 += text[i]; // Leave non-alphabetic characters unchanged
+    }
+    cout<<"The decryption of text: "<<result1<<endl;
+    return 0;
+    
+}
+
+// Main function
+int main() {
+
+    cout << "Welcome to Vigenere cipher Program" << endl; // Display welcome message
+
+    string choice, msg,key; // Declare variable for user choice
+    
+    // Prompt user for encryption or decryption operation
+    while (true) {
+        cout << "choose your operation: \n1) Encryption\n2) Decryption\nChoose(1,2): ";
+        cin >> choice; // Read user choice
+        cin.ignore(); // Clear input buffer
+        if ( choice == "2" ||choice == "1" )
+            break;
+        else
+            cout<<"Enter a valid choice"<<endl;
+    }
+
+    // Perform encryption operation
+    if (choice == "1") {
+        cout << "Encryption Operation" << endl; // Display encryption operation message
+        msg = message(); // Input message and key
+        key = get_key();
+        encryption(msg, key); // Encrypt message
+    }
+    // Perform decryption operation
+    else if (choice == "2") {
+        cout << "Decryption Operation\n" << endl; // Display decryption operation message
+        msg = message();
+        key = get_key();
+        decryption(msg, key); // Decrypt message
+
+    }
+
+    return 0; // Return 0 to indicate successful completion
+}
